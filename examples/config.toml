@@ -1,0 +1,15 @@
+[unipager]
+api = "ws://localhost:8055/"
+
+[mqtt]
+broker = "tcp://broker.hivemq.com"
+client_id = "unipager_tx"
+username = ""
+password = ""
+
+[topics]
+availability = "unipager_tx/availability"
+timeslot = "unipager_tx/timeslot"
+queue_length = "unipager_tx/queue_length"
+transmitting = "unipager_tx/transmitting"
+new_message = "unipager_tx/new_message"
