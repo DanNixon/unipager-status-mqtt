@@ -2,13 +2,12 @@ mod config;
 mod types;
 
 use crate::{config::Config, types::StatusMessage};
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use clap::Parser;
 use futures_util::StreamExt;
 use json::{self};
 use paho_mqtt::{AsyncClient, ConnectOptionsBuilder, CreateOptionsBuilder, Message};
-use std::env;
-use std::path::PathBuf;
+use std::{env, path::PathBuf, time::Duration};
 
 /// A tool to publish UniPager status via MQTT.
 #[derive(Parser)]
@@ -83,6 +82,12 @@ async fn main() -> Result<()> {
             }
         })
         .for_each(|m| async {
+            if !mqtt.is_connected() {
+                if let Err(e) = try_reconnect(&mqtt).await {
+                    log::error!("{}", e);
+                }
+            }
+            log::info!("{}", m);
             if let Err(e) = mqtt.try_publish(m) {
                 log::error!("Failed to publish MQTT message: {}", e);
             }
@@ -90,4 +95,21 @@ async fn main() -> Result<()> {
         .await;
 
     Ok(())
+}
+
+async fn try_reconnect(c: &AsyncClient) -> Result<()> {
+    for i in 0..30 {
+        log::info!("Attempting reconnection {}...", i);
+        match c.reconnect().await {
+            Ok(_) => {
+                log::info!("Reconnection successful");
+                return Ok(());
+            }
+            Err(e) => {
+                log::error!("Reconnection failed: {}", e);
+            }
+        }
+        tokio::time::sleep(Duration::from_secs(1)).await;
+    }
+    Err(anyhow!("Failed to reconnect to broker"))
 }
