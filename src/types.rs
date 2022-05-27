@@ -16,7 +16,7 @@ impl TryFrom<&Vec<JsonValue>> for PocsagMessage {
     fn try_from(value: &Vec<JsonValue>) -> std::result::Result<Self, Self::Error> {
         lazy_static! {
             static ref RE: Regex =
-                Regex::new("Received Message.+addr:\\s+(\\d+).+data:\\s+\"(.+)\".+").unwrap();
+                Regex::new("Received Message.+addr:\\s+(\\d+).+data:\\s+\"(.*)\".+").unwrap();
         }
 
         let text = &value[1];
