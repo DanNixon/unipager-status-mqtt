@@ -1,4 +1,7 @@
-# UniPager status MQTT bridge [![CI](https://github.com/DanNixon/unipager-status-mqtt/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DanNixon/unipager-status-mqtt/actions/workflows/ci.yml)
+# UniPager status MQTT bridge
+
+[![CI](https://github.com/DanNixon/unipager-status-mqtt/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DanNixon/unipager-status-mqtt/actions/workflows/ci.yml)
+[![dependency status](https://deps.rs/repo/github/dannixon/unipager-status-mqtt/status.svg)](https://deps.rs/repo/github/dannixon/unipager-status-mqtt)
 
 A tool to publish UniPager status via MQTT.
 
